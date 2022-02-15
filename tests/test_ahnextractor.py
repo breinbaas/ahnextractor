@@ -7,7 +7,8 @@ def test_version():
 
 def test_ahn3_dtm():
     ahnextractor = AhnExtractor(version=AhnVersion.AHN3, source=AhnSource.DTM)
-    data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), interval=20)    
+    data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), interval=20) 
+    i = 1   
 
 def test_ahn2_dtm():
     ahnextractor = AhnExtractor(version=AhnVersion.AHN2, source=AhnSource.DTM)

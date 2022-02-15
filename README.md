@@ -15,6 +15,22 @@ data = ahnextractor.get(
     interval=20)
 ```
 
+The result will be;
+```python
+[
+    (0.0, 122864.0, 473437.0, -5.752),
+    (20.0, 122876.32, 473452.76, -3.998),
+    (40.0, 122888.64, 473468.51, -2.173),
+    (60.0, 122900.96, 473484.27, -2.419),
+    (69.81, 122907.0, 473492.0, -2.407),
+    (89.81, 122926.13, 473497.82, -2.449),
+]
+```
+
+which are coordinates in the form of (length from start [m], x in RD coordinates, y in RD coordinates, height [m])
+
+**note that AHNExtractor will round the coordinates to 2 decimals and the height to 3 decimals**
+
 ### DSM 
 
 DSM is bedoeld als ruw bestand, waarbij zowel het maaiveld als de niet-maaiveld objecten (bomen, gebouwen, bruggen en andere objecten) vanuit de puntenwolk tot een 0,5 meter raster zijn herbemonsterd. Er zijn geen verdere bewerkingen uitgevoerd. 
