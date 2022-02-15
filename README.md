@@ -22,8 +22,8 @@ which will result in a list like;
 
 ## Todo
 
-* [ ] check if AHN2 is possible
-* [ ] check if AHN4 is possible
+* [ ] check if AHN2 is possible (changes expected as of mid 2022 see https://geoforum.nl/t/datasets-ahn1-en-ahn-2-bij-pdok-uit-productie/6624)
+* [ ] check if AHN4 is possible (expected mid 2022)
 * [ ] more tests
 * [ ] documenting
 * [ ] publish it on PyPI
