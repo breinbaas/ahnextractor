@@ -8,5 +8,5 @@ def test_version():
 def test_polyline():
     ahnextractor = AhnExtractor()
 
-    data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)))
+    data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), interval=20)
     i = 1

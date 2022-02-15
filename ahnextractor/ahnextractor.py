@@ -38,12 +38,8 @@ class AhnExtractor(BaseModel):
             dx = point_end[0] - point_start[0]
             dy = point_end[1] - point_start[1]
             ls = np.arange(0, section_length, interval)
-            xs = []
-            ys = []
-            for l in ls:
-                xs.append(point_start[0] + l / section_length * dx)
-                ys.append(point_start[1] + l / section_length * dy)
-
+            xs = [point_start[0] + l / section_length * dx for l in ls]
+            ys = [point_start[1] + l / section_length * dy for l in ls]
             z_ahn = asyncio.run(self._async_get_ahn_of_rd_points([point_start, point_end], interval))
             ahn_data = list(zip(xs,ys,z_ahn))
             lines_ahn_data_list += ahn_data  # Save the values to the list
