@@ -33,4 +33,4 @@ which will result in a list like;
 
 ## Credits
 
-Most of the code was copied from [this repository](https://github.com/viktor-platform/sample-ahn-profile) so the credits for the async data fetching code goes to [Sylvian van der Meer](https://github.com/svandermeer) and [Viktor AI](https://www.viktor.ai/)
+Most of the code was copied from [this repository](https://github.com/viktor-platform/sample-ahn-profile) so the credits go to [Sylvian van der Meer](https://github.com/svandermeer) and [Viktor AI](https://www.viktor.ai/)
