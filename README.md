@@ -27,12 +27,12 @@ data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,4
 
 ### DTM
 
+DTM is bedoeld als maaiveldbestand, waarbij alle niet-maaiveld objecten (bomen, gebouwen, bruggen en andere objecten) uit de puntenwolk zijn verwijderd. Incidentele No-Data cellen zijn opgevuld.
+
 ```python
 ahnextractor = AhnExtractor(version=AhnVersion.AHN2, source=AhnSource.DTM)
 data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), interval=20)
 ```
-
-DTM is bedoeld als maaiveldbestand, waarbij alle niet-maaiveld objecten (bomen, gebouwen, bruggen en andere objecten) uit de puntenwolk zijn verwijderd. Incidentele No-Data cellen zijn opgevuld.
 
 ### DSM
 
