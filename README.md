@@ -5,7 +5,7 @@ The AHNExtractor is able to extract AHN data (height data for The Netherlands) b
 Sample code
 ```python
 ahnextractor = AhnExtractor()
-data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), interval=2.0)
+data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), interval=20)
 ```
 
 which will result in a list like;
