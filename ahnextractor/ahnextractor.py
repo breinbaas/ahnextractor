@@ -22,6 +22,7 @@ import numpy as np
 import numpy.typing as npt
 import asyncio
 import warnings
+from rdp import rdp
 
 from .polyline import Polyline
 
@@ -54,12 +55,13 @@ GRIDSIZE_AHN = 0.5
 class AhnExtractor(BaseModel):
     version: AhnVersion = AhnVersion.AHN3
     source: AhnSource = AhnSource.DTM
-    
-    def get(self, polyline: Polyline, interval: float = 5.) -> List[Dict[str, Union[float, Any]]]:
+        
+    def get(self, polyline: Polyline, interval: float = 5., rdp_epsilon=0.0) -> List[Dict[str, Union[float, Any]]]:
         """
         Splits the defined Polyline into sections with a length of +interval+
         :param polyline: Provide the line along which the AHN should be obtained
         :param interval: Interval after which distance in metres a new value of the AHN should be obtained
+        :param rdp_epsilon: Epsilon for RDP algorithm, defaults to 0.0 (no RDP)
         :return: A list of all the AHN values in the same direction as the Polyline
         """
         line_section_lengths = self._get_geo_polyline_section_length(polyline)
@@ -67,16 +69,24 @@ class AhnExtractor(BaseModel):
         lines_ahn_data_list = []  # Set up a list such that the values along each line can be saved
 
         
-        # For each line, get the start point, end point and the length
+        # For each line, get the start point, end point and the length        
+        llprev = 0         
         for point_start, point_end, section_length in zip(points[:-1], points[1:], line_section_lengths):
             dx = point_end[0] - point_start[0]
             dy = point_end[1] - point_start[1]
-            ls = np.arange(0, section_length, interval)
-            xs = [point_start[0] + l / section_length * dx for l in ls]
-            ys = [point_start[1] + l / section_length * dy for l in ls]
-            z_ahn = asyncio.run(self._async_get_ahn_of_rd_points([point_start, point_end], interval))
-            ahn_data = list(zip(xs,ys,z_ahn))
+            nls = np.arange(0, section_length, interval)
+            xs = [round(point_start[0] + l / section_length * dx, 2) for l in nls]
+            ys = [round(point_start[1] + l / section_length * dy, 2) for l in nls]
+            ls = [round(l + llprev,2) for l in nls]
+            z_ahn = [round(z, 3) for z in asyncio.run(self._async_get_ahn_of_rd_points([point_start, point_end], interval))]
+            ahn_data = list(zip(ls, xs,ys,z_ahn))
             lines_ahn_data_list += ahn_data  # Save the values to the list
+            llprev += section_length
+
+        if rdp_epsilon > 0:
+            final_points = [p[0] for p in rdp([(p[0], p[-1]) for p in lines_ahn_data_list], epsilon=rdp_epsilon)]
+            lines_ahn_data_list = [p for p in lines_ahn_data_list if p[0] in final_points]
+        
         return lines_ahn_data_list  # Return the data list
 
     def _get_geo_polyline_section_length(self, geo_polyline: Polyline) -> npt.NDArray[float]:

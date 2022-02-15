@@ -197,6 +197,17 @@ checkqa-mypy = ["mypy (==v0.761)"]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xmlschema"]
 
 [[package]]
+name = "rdp"
+version = "0.8"
+description = "Pure Python implementation of the Ramer-Douglas-Peucker algorithm"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+numpy = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.1.1"
 description = "Backported and Experimental Type Hints for Python 3.6+"
@@ -227,7 +238,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "da14fabf305db85c0ea86d396a4196198abcbffa3a8550227e37ead887fc7f4f"
+content-hash = "72a49cbdda409fee0b1f2fa064352daf1261f46e1098ff27388538b99d1ebb02"
 
 [metadata.files]
 aiohttp = [
@@ -535,6 +546,9 @@ pyparsing = [
 pytest = [
     {file = "pytest-5.4.3-py3-none-any.whl", hash = "sha256:5c0db86b698e8f170ba4582a492248919255fcd4c79b1ee64ace34301fb589a1"},
     {file = "pytest-5.4.3.tar.gz", hash = "sha256:7979331bfcba207414f5e1263b5a0f8f521d0f457318836a7355531ed1a4c7d8"},
+]
+rdp = [
+    {file = "rdp-0.8.tar.gz", hash = "sha256:19ec92f0803587891a00b439441e5e23fc9410500983f02941e4cf9ac3113e4b"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.1.1-py3-none-any.whl", hash = "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"},

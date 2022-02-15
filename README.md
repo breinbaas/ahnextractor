@@ -10,7 +10,9 @@ DTM is bedoeld als maaiveldbestand, waarbij alle niet-maaiveld objecten (bomen, 
 
 ```python
 ahnextractor = AhnExtractor(version=AhnVersion.AHN3, source=AhnSource.DTM) 
-data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), interval=20)
+data = ahnextractor.get(
+    polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), 
+    interval=20)
 ```
 
 ### DSM 
@@ -19,7 +21,9 @@ DSM is bedoeld als ruw bestand, waarbij zowel het maaiveld als de niet-maaiveld 
 
 ```python
 ahnextractor = AhnExtractor(version=AhnVersion.AHN3, source=AhnSource.DSM) 
-data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), interval=20)
+data = ahnextractor.get(
+    polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), 
+    interval=20)
 ```
 
 
@@ -31,7 +35,9 @@ DTM is bedoeld als maaiveldbestand, waarbij alle niet-maaiveld objecten (bomen, 
 
 ```python
 ahnextractor = AhnExtractor(version=AhnVersion.AHN2, source=AhnSource.DTM)
-data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), interval=20)
+data = ahnextractor.get(
+    polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), 
+    interval=20)
 ```
 
 ### DSM
@@ -40,9 +46,24 @@ DSM is bedoeld als ruw bestand, waarbij zowel het maaiveld als de niet-maaiveld 
 
 ```python
 ahnextractor = AhnExtractor(version=AhnVersion.AHN2, source=AhnSource.DSM)
-data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), interval=20)
+data = ahnextractor.get(
+    polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)),
+    interval=20)
 ```
 
+## RDP
+
+It is possible to apply the [Ramer-Douglas-Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) to filter points based on the height difference between the consecutive points. A value of 0.05 is recommended to filter out unnecessary points.
+
+Example code;
+
+```python
+ahnextractor = AhnExtractor(version=AhnVersion.AHN3, source=AhnSource.DTM)
+data = ahnextractor.get(
+    polyline=Polyline.from_points((122864,473437), (122907,473492), (122930, 473499)), 
+    interval=20, 
+    rdp_epsilon=0.05)
+```
 
 ## Todo
 
@@ -51,7 +72,7 @@ data = ahnextractor.get(polyline=Polyline.from_points((122864,473437), (122907,4
 * [ ] more tests
 * [ ] documenting
 * [ ] publish it on PyPI
-* [ ] add option for the RDP (Ramer-Douglas-Peucker) algorithm 
+* [x] add option for the RDP (Ramer-Douglas-Peucker) algorithm 
 * [ ] add option for spike removal if the data is nasty
 * [x] add DTM, DSM option
 
