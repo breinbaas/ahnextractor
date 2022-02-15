@@ -25,17 +25,35 @@ import warnings
 
 from .polyline import Polyline
 
-URL_AHN3 = "https://geodata.nationaalgeoregister.nl/ahn3/wms"
-BLADINDEX_AHN3 = "ahn3_05m_dtm"  # Use "ahn3_05_dsm" for the surface model instead of the terrain model
-GRIDSIZE_AHN3 = 0.5
-
 class AhnVersion(IntEnum):
-    #AHN2 = 2
+    AHN2 = 2
     AHN3 = 3
-    #AHN4 = 4
+    # AHN4 = 4
+
+class AhnSource(IntEnum):
+    DTM = 0
+    DSM = 1
+
+AhnUrls = {
+    AhnVersion.AHN2:"https://geodata.nationaalgeoregister.nl/ahn2/wms",
+    AhnVersion.AHN3:"https://geodata.nationaalgeoregister.nl/ahn3/wms",    
+}
+
+AhnDTMBladIndex = {
+    AhnVersion.AHN2:"ahn2_05m_int",
+    AhnVersion.AHN3:"ahn3_05m_dtm"
+}
+
+AhnDSMBladIndex = {
+    AhnVersion.AHN2:"ahn2_05m_ruw",
+    AhnVersion.AHN3:"ahn3_05m_dsm"
+}
+
+GRIDSIZE_AHN = 0.5
 
 class AhnExtractor(BaseModel):
     version: AhnVersion = AhnVersion.AHN3
+    source: AhnSource = AhnSource.DTM
     
     def get(self, polyline: Polyline, interval: float = 5.) -> List[Dict[str, Union[float, Any]]]:
         """
@@ -86,14 +104,14 @@ class AhnExtractor(BaseModel):
         # The bbox is currently the outermost edges of the map. However, since the map will be filled with pixels, the
         # centre of the pixel in the top left corner will be slightly to the right and below of the bbox top left corner.
         # Let's compensate for that by adding half a pixel to the left, right, top and bottom
-        if (x_max - x_min) < GRIDSIZE_AHN3:  # First check whether the line is vertical
+        if (x_max - x_min) < GRIDSIZE_AHN:  # First check whether the line is vertical
             width = 0  # Set a zero pixel width if it is
-            pixel_dx = GRIDSIZE_AHN3 / 200
+            pixel_dx = GRIDSIZE_AHN / 200
         else:  # Otherwise check what the pixel_dx is
             pixel_dx = (x_max - x_min) / width
-        if (y_max - y_min) < GRIDSIZE_AHN3:  # Do the same for y
+        if (y_max - y_min) < GRIDSIZE_AHN:  # Do the same for y
             height = 0
-            pixel_dy = GRIDSIZE_AHN3 / 200
+            pixel_dy = GRIDSIZE_AHN / 200
         else:
             pixel_dy = (y_max - y_min) / height
         x_min, x_max = x_min - pixel_dx / 2., x_max + pixel_dx / 2.  # Increase the bbox size by half the pixel width
@@ -163,7 +181,7 @@ class AhnExtractor(BaseModel):
                 if going_up:  # Y-axis is positive downward in images
                     j_list = j_list[::-1]
                 i_j_list = list(zip(i_list, j_list))
-                tasks = [asyncio.create_task(self.async_get_ahn_of_rd_point(i, j, session, map_payload_dict=map_payload_dict))
+                tasks = [asyncio.create_task(self._async_get_ahn_of_rd_point(i, j, session, map_payload_dict=map_payload_dict))
                         for i, j in i_j_list]  # Create all the tasks that have to be executed
                 ahn_list = await asyncio.gather(*tasks, return_exceptions=False)  # Wait till all tasks are completed
             # Following line can be removed when aiohttp >= 4.0.0 is released
@@ -171,7 +189,7 @@ class AhnExtractor(BaseModel):
         return ahn_list  # Return the AHN values in list format
 
 
-    async def async_get_ahn_of_rd_point(self, point_index, point_jndex, session, map_payload_dict) -> float:
+    async def _async_get_ahn_of_rd_point(self, point_index, point_jndex, session, map_payload_dict) -> float:
         """
         Get AHN of a single point. This is done by composing the request URL from the URL base and the payload
         :param point_index: Which index in i of the points should be retrieved on the bbox
@@ -180,22 +198,28 @@ class AhnExtractor(BaseModel):
         :param map_payload_dict:
         :return: AHN value
         """
+        if self.source == AhnSource.DTM:
+            bladindex = AhnDTMBladIndex[self.version]
+        else:
+            bladindex = AhnDSMBladIndex[self.version]
+
         # Create the payload dict
         payload = {
             "service": "wms",
             "version": "1.3.0",
             "request": "getfeatureinfo",
-            "layers": BLADINDEX_AHN3,
+            "layers": bladindex,
             "format": "image/png",
             "crs": "EPSG:28992",
-            "query_layers": BLADINDEX_AHN3,
+            "query_layers": bladindex,
             "info_format": "application/json",
             "i": f"{point_index}",
             "j": f"{point_jndex}",
         }
         payload.update(map_payload_dict)
 
-        async with session.get(URL_AHN3, params=payload) as response:  # Set up the asynchronous request
+        url_ahn = AhnUrls[self.version]
+        async with session.get(url_ahn, params=payload) as response:  # Set up the asynchronous request
             response.raise_for_status()
             json = await response.json()  # Wait for the response to arrive
             ahn = float(json['features'][0]['properties']['GRAY_INDEX'])  # Get AHN from the returned json
