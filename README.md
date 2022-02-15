@@ -1,6 +1,6 @@
 # What it is
 
-The AHNExtractor is able to extract AHN data (height data for The Netherlands) based on a given polyline. The code is a rewrite of the [original code](https://github.com/viktor-platform/sample-ahn-profile) but with some extra functionality like x, y, z output and (hopefully?) AHN2 / AHN3 choices. **Note that the changes are expected mid 2022 where AHN2 and AHN3 data might be moved to another server and AHN4 will become available**.
+The AHNExtractor is able to extract AHN data (height data for The Netherlands) based on a given polyline. The code is a rewrite of the [original code](https://github.com/viktor-platform/sample-ahn-profile) but with some extra functionality like x, y, z output and AHN2 / AHN3 choices. **Note that the changes are expected mid 2022 where AHN2 and AHN3 data might be moved to another server and AHN4 will become available**.
 
 ## Sample code AHN3 
 
