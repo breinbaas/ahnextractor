@@ -85,6 +85,7 @@ data = ahnextractor.get(
 
 ## Todo
 
+* [ ] implement ArcGIS REST services for AHN data, thanks to [Mark van de Krogt](https://www.linkedin.com/in/markvanderkrogt/) for pointing me in that direction
 * [x] implement AHN2 (changes expected as of mid 2022 see https://geoforum.nl/t/datasets-ahn1-en-ahn-2-bij-pdok-uit-productie/6624)
 * [ ] implement AHN4 (expected mid 2022)
 * [ ] more tests
